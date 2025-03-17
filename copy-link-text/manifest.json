@@ -1,0 +1,11 @@
+{
+   "background": {
+      "service_worker": "bg.js"
+   },
+   "description": "Adds a context menu to copy the clicked link's text",
+   "manifest_version": 3,
+   "minimum_chrome_version": "90",
+   "name": "Copy link text",
+   "permissions": [ "contextMenus", "activeTab", "scripting" ],
+   "version": "1.0.0"
+}
