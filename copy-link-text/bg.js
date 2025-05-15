@@ -11,11 +11,28 @@ chrome.runtime.onInstalled.addListener(() => {
 });
 
 chrome.contextMenus.onClicked.addListener((info, tab) => {
+  copyLinkText(info, tab);
+});
+
+chrome.commands.onCommand.addListener((command) => {
+  if (command === "copy-link-text") {
+    chrome.tabs.query({active: true, currentWindow: true}, (tabs) => {
+      const tab = tabs[0];
+      const info = {
+        frameId: null,
+        linkUrl: null
+      };
+      copyLinkText(info, tab);
+    });
+  }
+});
+
+function copyLinkText(info, tab) {
   console.log("Context menu clicked", { info, tab });
 
   chrome.scripting
     .executeScript({
-      target: { tabId: tab.id, frameIds: [info.frameId] },
+      target: { tabId: tab.id },
       files: ["content.js"],
       // injectImmediately: true, // TODO: Chrome 102
     })
@@ -27,4 +44,4 @@ chrome.contextMenus.onClicked.addListener((info, tab) => {
     .catch((error) => {
       console.error("Failed to execute content script", error);
     });
-});
+}

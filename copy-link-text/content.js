@@ -1,5 +1,7 @@
 "use strict";
 
+let lastMousePosition = {x: 0, y: 0};
+
 chrome.runtime.onMessage.addListener((request) => {
   console.log("Link URL:", request.linkUrl);
 
@@ -10,9 +12,21 @@ chrome.runtime.onMessage.addListener((request) => {
   }
 });
 
+document.addEventListener('mousemove', (event) => {
+  lastMousePosition.x = event.clientX;
+  lastMousePosition.y = event.clientY;
+});
+
 function copyLinkText(linkUrl) {
   console.log("Copying link text");
-  const active = findActiveElement();
+  let active;
+  if (linkUrl) {
+    active = findActiveElement();
+  } else {
+    console.log("linkUrl is null. get link url");
+    active = document.elementFromPoint(lastMousePosition.x, lastMousePosition.y);
+    linkUrl = active.href;
+  }
   console.log("Active element: ", active);
   const link = findLinkElement(active, linkUrl);
   console.log("Link element: ", link);
