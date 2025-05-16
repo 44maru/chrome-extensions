@@ -88,4 +88,36 @@ function writeClipboard(text) {
     document.execCommand('copy');
     document.body.removeChild(area);
   }
+
+  showCopyNotification(text)
 }
+
+function showCopyNotification(text) {
+    const notification = document.createElement("div");
+    notification.textContent = `Copied: "${text}"`;
+    notification.style.position = "fixed";
+    notification.style.bottom = "20px";
+    notification.style.right = "20px";
+    notification.style.padding = "10px 15px";
+    notification.style.backgroundColor = "#323232";
+    notification.style.color = "#fff";
+    notification.style.borderRadius = "5px";
+    notification.style.fontSize = "14px";
+    notification.style.zIndex = "9999";
+    notification.style.boxShadow = "0 2px 6px rgba(0,0,0,0.3)";
+    notification.style.opacity = "0";
+    notification.style.transition = "opacity 0.3s";
+
+    document.body.appendChild(notification);
+    requestAnimationFrame(() => {
+        notification.style.opacity = "1";
+    });
+
+    setTimeout(() => {
+        notification.style.opacity = "0";
+        notification.addEventListener("transitionend", () => {
+            notification.remove();
+        });
+    }, 1000);
+}
+
